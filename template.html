@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gremlin-Report</title>
+</head>
+<body>
+    <h1>{{.Header}}</h1>
+    <p>{{.Resume}}</p>
+    <h2>Mutaciones:</h2>
+    <ul>
+        {{range .Mutations}}
+        <li>
+            <strong>Name:</strong> {{.Name}}<br>
+            <strong>Mutation Type:</strong> {{.MutationType}}<br>
+            <strong>File:</strong> {{.File.Name}}<br>
+            <strong>Code:</strong> {{.File.Code}}<br>
+        </li>
+        {{end}}
+    </ul>
+</body>
+</html>
