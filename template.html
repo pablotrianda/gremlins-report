@@ -2,18 +2,32 @@
 <html>
 <head>
     <title>Gremlin-Report</title>
+    <style>
+@media (prefers-color-scheme: dark) {
+
+}
+.NOT_COVERED {
+color: #dbdb25;
+    font-weight: 400;
+}
+        .RUNNABLE
+        .KILLED
+        .LIVED
+        .TIMED_OUT
+        .NOT_VIABLE
+    </style>
 </head>
 <body>
     <h1>{{.Header}}</h1>
     <p>{{.Resume}}</p>
-    <h2>Mutaciones:</h2>
+    <h2>Mutants:</h2>
     <ul>
         {{range .Mutations}}
         <li>
-            <strong>Name:</strong> {{.Name}}<br>
+            <div class="{{.ClasName}}"> {{.Name}}</div>
             <strong>Mutation Type:</strong> {{.MutationType}}<br>
             <strong>File:</strong> {{.File.Name}}<br>
-            <strong>Code:</strong> {{.File.Code}}<br>
+            <strong>Code:</strong> {{.File.Code}}
         </li>
         {{end}}
     </ul>

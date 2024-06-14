@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -15,6 +14,7 @@ type GremlinReport struct {
 
 type Mutation struct {
 	Name         string   `json:"name"`
+	ClasName     string   `json:"name"`
 	MutationType string   `json:"mutation_type"`
 	File         Location `json:"file"`
 }
@@ -66,7 +66,7 @@ func getMutations(lines []string) []Mutation {
 		if ok {
 			mutationsType := extractMutationType(e)
 			location := extractLocation(e)
-			mutation := Mutation{Name: mut, MutationType: mutationsType, File: location}
+			mutation := Mutation{Name: mut, ClasName: strings.Replace(mut, " ", "_", -1), MutationType: mutationsType, File: location}
 			mutations = append(mutations, mutation)
 		}
 	}
@@ -119,7 +119,6 @@ func extractLocation(str string) Location {
 
 func extractLineCode(fileName, line string) string {
 	lineCode, _ := exec.Command("bash", "-c", "sed -n "+line+","+line+"p "+fileName).CombinedOutput()
-	fmt.Println(string(lineCode))
 
 	return string(lineCode)
 }
