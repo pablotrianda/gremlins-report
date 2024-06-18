@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Gremlin-Report</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-color: Canvas;
@@ -96,6 +98,19 @@
             display: block;
             box-sizing: border-box;
         }
+
+        .github-link {
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            color: #333; 
+            font-size: 24px;
+            text-decoration: none; 
+        }
+
+        .github-link:hover {
+            color: #000; 
+        }
     </style>
 </head>
 <body>
@@ -105,6 +120,9 @@
             <h4>Total: {{.MutantsTotal}} - Killed: {{.MutantsKilled}} - Lived: {{.MutantsLived}} - Not covered: {{.MutantsNotCovered}} - Not viable: {{.MutantsNotViable}}</h3>
             <h4>Elapsed Time {{.ElapsedTime}}</h4>
         </div>
+  <a href="https://github.com/pablotrianda/gremlins-report" target="_blank" class="github-link">
+            <i class="fab fa-github"></i>
+        </a>
     </header>
     <div class="content">
         <ul>
