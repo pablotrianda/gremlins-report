@@ -3,33 +3,130 @@
 <head>
     <title>Gremlin-Report</title>
     <style>
-@media (prefers-color-scheme: dark) {
+        body {
+            background-color: Canvas;
+            color: CanvasText;
+            color-scheme: light dark;
+        }
+        .status{
+            font-weight: 600;
+        }
+        .not_covered {
+            color: #dbdb25;
+        }
+        .runnable{
+            color: #dbdb25;
+        }
+        .killed{
+            color: #26dd2d;
+        }
+        .lived{
+            color: #e93d3d;
+        }
+        .timed_out{
+            color: #dbdb25;
+        }
+        .not_viable{
+            color: #dbdb25;
+        }
+        .header {
+            display: flex;
+            justify-content: center; 
+            align-items: center;    
+            height: 100vh;         
+            background-color: #f0f0f0; 
+        }
+        .centered-div {
+                background-color: #3498db;
+                color: white;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+        }
+        ul {
+            list-style: none;
+        }
+        a.mutation {
+            text-decoration: none;
+            color: aliceblue;
+            align-content: end;
+            font-size: 14px;
+            padding-left: 12px;
+        }
+        .file{
+            background-color:#245f6c;
+            text-align:center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: left;
+        }
 
-}
-.NOT_COVERED {
-color: #dbdb25;
-    font-weight: 400;
-}
-        .RUNNABLE
-        .KILLED
-        .LIVED
-        .TIMED_OUT
-        .NOT_VIABLE
+        .code-container {
+            position: relative;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding-left: 30px; 
+            border: 1px solid #ccc;
+            overflow-x: auto; 
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .code-container pre {
+            margin: 0;
+            white-space: pre-wrap; 
+            tab-size: 4; 
+        }
+
+        .code-container pre::before {
+            content: attr(data-line-number);
+            position: absolute;
+            left: 0;
+            width: 30px; 
+            padding: 0 5px;
+            text-align: center;
+            color: #999;
+            border-right: 1px solid #ccc; 
+            background-color: #f0f0f0;
+            height: 100%;
+            display: block;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
-    <h1>{{.Header}}</h1>
-    <p>{{.Resume}}</p>
-    <h2>Mutants:</h2>
-    <ul>
-        {{range .Mutations}}
-        <li>
-            <div class="{{.ClasName}}"> {{.Name}}</div>
-            <strong>Mutation Type:</strong> {{.MutationType}}<br>
-            <strong>File:</strong> {{.File.Name}}<br>
-            <strong>Code:</strong> {{.File.Code}}
-        </li>
-        {{end}}
-    </ul>
+    <header>
+        <div class="centered-div">
+            <h1>Gremlins Report</h1>
+            <h4>Total: {{.MutantsTotal}} - Killed: {{.MutantsKilled}} - Lived: {{.MutantsLived}} - Not covered: {{.MutantsNotCovered}} - Not viable: {{.MutantsNotViable}}</h3>
+            <h4>Elapsed Time {{.ElapsedTime}}</h4>
+        </div>
+    </header>
+    <div class="content">
+        <ul>
+            {{range .Files}}
+                <li class="file" >
+                    <strong>File:</strong> {{.FileName}}<br>
+                </li>
+                {{range .Mutations}}
+                <li>
+                    <div class="row">
+                        <div class="status {{.ClassName}}">{{.Status}}</div> 
+                        <a class="mutation" href="{{.Url}}" target="_blank">{{.Type}}</a>
+                    </div>
+                    <div class="code-container">
+                        <pre data-line-number="{{.Line}}">{{.Code}}</pre>
+                    </div>
+                    Location: {{.Line}}:{{.Column}}<br>
+                </li>
+                <br>
+                {{end}}
+            {{end}}
+        </ul>
+    </div>
 </body>
 </html>

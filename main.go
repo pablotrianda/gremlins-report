@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"log"
 	"os"
 	"os/exec"
@@ -10,21 +11,18 @@ import (
 	"github.com/pablotrianda/gremlinks-report/src/render"
 )
 
+//go:embed template.html
+var f embed.FS
+
 func main() {
-	output, err := runGremlins(os.Args)
+	jsonOutput, err := runGremlins(os.Args)
 	if err != nil {
 		log.Println(err)
 	}
 
-	gremlinsReport := parser.GremlinsOutput(output)
+	gremlinsReport := parser.LoadGremlinsOutput(jsonOutput)
 
-	// jsonData, err := json.Marshal(gremlinsReport)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-	// fmt.Println(string(jsonData))
-
-	templateFile, err := os.ReadFile("./template.html")
+	templateFile, err := f.ReadFile("template.html")
 	if err != nil {
 		panic(err)
 	}
@@ -33,10 +31,13 @@ func main() {
 
 func runGremlins(args []string) (string, error) {
 	gremlinsParams := strings.Join(args[1:], " ")
-	outputGremlins, err := exec.Command("bash", "-c", "gremlins "+gremlinsParams).CombinedOutput()
+	tmpFile, err := os.CreateTemp("", "gremlins_output_*.json")
 	if err != nil {
-		return "", nil
+		return "", err
 	}
+	tmpFile.Close()
+	command := "gremlins " + gremlinsParams + " --output=" + tmpFile.Name()
+	exec.Command("bash", "-c", command).Run()
 
-	return string(outputGremlins), nil
+	return tmpFile.Name(), nil
 }
