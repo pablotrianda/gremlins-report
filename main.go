@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -36,7 +37,7 @@ func runGremlins(args []string) (string, error) {
 		return "", err
 	}
 	tmpFile.Close()
-	command := "gremlins " + gremlinsParams + " --output=" + tmpFile.Name()
+	command := fmt.Sprintf("gremlins %s --output=%s", gremlinsParams, tmpFile.Name())
 	exec.Command("bash", "-c", command).Run()
 
 	return tmpFile.Name(), nil
